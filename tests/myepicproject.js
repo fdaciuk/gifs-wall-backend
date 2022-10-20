@@ -11,25 +11,27 @@ const main = async () => {
   const program = anchor.workspace.Myepicproject
   const baseAccount = anchor.web3.Keypair.generate()
 
-  const tx = await program.rpc.startStuffOff({
-    accounts: {
+  const tx = await program.methods
+    .startStuffOff()
+    .accounts({
       baseAccount: baseAccount.publicKey,
       user: provider.wallet.publicKey,
       systemProgram: SystemProgram.programId,
-    },
-    signers: [baseAccount],
-  })
+    })
+    .signers([baseAccount])
+    .rpc()
   console.log("📝 Your transaction signature", tx)
 
   let account = await program.account.baseAccount.fetch(baseAccount.publicKey)
   console.log('👀 GIF Count', account.totalGifs.toString())
 
-  await program.rpc.addGif('insert_a_gif_link_here', {
-    accounts: {
+  await program.methods
+    .addGif('insert_a_gif_link_here')
+    .accounts({
       baseAccount: baseAccount.publicKey,
       user: provider.wallet.publicKey,
-    }
-  })
+    })
+    .rpc()
 
   account = await program.account.baseAccount.fetch(baseAccount.publicKey)
   console.log('👀 GIF Count', account.totalGifs.toString())
